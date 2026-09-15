@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Onix · panel admin en Chrome",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}",
+      "deviceId": "chrome",
+      "flutterMode": "debug",
+      "toolArgs": ["--web-port=5001"]
+    },
+    {
+      "name": "Onix · panel admin en Edge",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "cwd": "${workspaceFolder}",
+      "deviceId": "edge",
+      "flutterMode": "debug",
+      "toolArgs": ["--web-port=5001"]
+    }
+  ]
+}

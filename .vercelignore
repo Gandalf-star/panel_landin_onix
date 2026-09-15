@@ -1,0 +1,8 @@
+# Lo que no hace falta subir a Vercel cuando se despliega con la CLI.
+# (Vercel compila en su servidor con despliegue/compilar_web.sh.)
+build/
+.dart_tool/
+.idea/
+*.iml
+.flutter-plugins-dependencies
+test/
