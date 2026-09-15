@@ -11,6 +11,10 @@ cd "$(dirname "$0")/.."
 readonly VERSION_FLUTTER="${FLUTTER_VERSION:-3.47.1}"
 readonly CARPETA_FLUTTER="${FLUTTER_HOME:-$HOME/flutter}"
 
+# Revisa las credenciales antes de descargar Flutter: si faltan, el
+# despliegue falla en segundos y el log dice que variables llegaron.
+bash despliegue/preparar_env.sh
+
 if ! command -v flutter >/dev/null 2>&1; then
   if [[ ! -x "$CARPETA_FLUTTER/bin/flutter" ]]; then
     # Flutter descomprime el SDK de Dart con unzip.

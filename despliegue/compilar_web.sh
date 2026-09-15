@@ -1,43 +1,13 @@
 #!/usr/bin/env bash
 # Paso "build" de Vercel: arma el .env y compila el panel admin en build/web.
-#
-# El .env no esta en el repositorio (esta en .gitignore), pero pubspec.yaml
-# lo declara como asset y sin el la compilacion falla. En Vercel se escribe
-# con las variables de entorno del proyecto (Settings -> Environment
-# Variables); en el computador se usa el .env que ya existe.
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-# Claves que el panel lee del .env (ver .env.ejemplo).
-readonly CLAVES_ENV=(SUPABASE_URL SUPABASE_ANON_KEY SEGUNDOS_SONDEO)
 readonly CARPETA_FLUTTER="${FLUTTER_HOME:-$HOME/flutter}"
 
-# 1. Credenciales: se revisan antes de compilar para fallar en segundos y
-#    no despues de varios minutos.
-if [[ -n "${SUPABASE_URL:-}" && -n "${SUPABASE_ANON_KEY:-}" ]]; then
-  echo "Creando .env con las variables de entorno del despliegue."
-  : > .env
-  for clave in "${CLAVES_ENV[@]}"; do
-    if [[ -n "${!clave:-}" ]]; then
-      printf '%s=%s\n' "$clave" "${!clave}" >> .env
-    fi
-  done
-elif [[ -f .env ]]; then
-  echo "Usando el .env que ya existe."
-else
-  cat >&2 <<'AVISO'
-ERROR: faltan las credenciales de Supabase.
-
-En Vercel, abre el proyecto -> Settings -> Environment Variables y agrega
-(las mismas de la landing; los valores estan en el .env del proyecto):
-  SUPABASE_URL       https://TU-PROYECTO.supabase.co
-  SUPABASE_ANON_KEY  la clave publica (anon) del proyecto
-Luego vuelve a desplegar. Nunca uses la service_role key: todo lo que va en
-el .env llega al navegador.
-AVISO
-  exit 1
-fi
+# 1. Credenciales de Supabase en el .env (ver preparar_env.sh).
+bash despliegue/preparar_env.sh
 
 # 2. Flutter en el PATH (el paso install ya lo descargo y corrio pub get).
 if ! command -v flutter >/dev/null 2>&1; then
